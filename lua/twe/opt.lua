@@ -135,6 +135,9 @@ vim.cmd("set jumpoptions+=stack")
 vim.cmd("set ignorecase")
 vim.cmd("set smartcase")
 
+-- blank out mouse to prevent accidentally selecting the wrong window/buffer/tab/etc
+vim.cmd("set mouse=")
+
 --[[ COMPLETION ]]
 local cmp = require("cmp")
 cmp.setup({
