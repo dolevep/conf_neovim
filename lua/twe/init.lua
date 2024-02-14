@@ -19,3 +19,4 @@ require("lazy").setup("twe.lazy", {
 
 require("twe.keys")
 require("twe.opt")
+require("twe.autocmds")

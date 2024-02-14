@@ -13,7 +13,7 @@ return {
 			---------------------------
 			options = {
 				icons_enabled = true,
-				theme = ayu,
+				theme = "ayu",
 				component_separators = { left = '', right = '' },
 				section_separators = { left = '', right = '' },
 				disabled_filetypes = {
@@ -48,7 +48,10 @@ return {
 			tabline = {},
 			winbar = {},
 			inactive_winbar = {},
-			extensions = {}
+			extensions = {
+        "oil",
+				"trouble",
+      }
 		})
 	end
 }

@@ -1,5 +1,5 @@
 -- TODO: Vimspector ?
--- TODO: Terminal integration of some kind?                   - Testing floaterm
+-- TODO: Terminal integration of some kind?                   - NeoTerm is the easiest to integrate without issues but toggleterm seems more feature rich
 -- TODO: Change between open buffers/windows intelligently.
 -- TODO: Look to limit/purposefully use italics               - Tweaked some settings - italics still exist in some places like here
 
@@ -120,15 +120,20 @@ vim.api.nvim_set_option('smarttab', true)
 vim.api.nvim_set_option('autoindent', true)
 vim.cmd("syntax enable")
 vim.cmd("filetype plugin indent on")
-vim.cmd("set number relativenumber")
+-- vim.cmd("set number relativenumber") -- bottom right, stop using like nearly 5% screen realestate for nothing
 
 vim.cmd("set shiftwidth =2") -- IMPORTANT: MUST be set =4, NO SPACE ALLOWED AFTER EQUALS
 vim.cmd("set tabstop =2")
 vim.cmd("set softtabstop =2")
 
+-- sets our cursor such that it makes sense
+vim.cmd("set guicursor:n-i-c-ci-v:ver1")
+-- IMPORTANT - FIXES JUMPLIST BEHAVIOUR TO WORK HOW I WANT
+-- ... potentially ... maybe.
+vim.cmd("set jumpoptions+=stack")
 
-
-
+vim.cmd("set ignorecase")
+vim.cmd("set smartcase")
 
 --[[ COMPLETION ]]
 local cmp = require("cmp")
@@ -181,7 +186,7 @@ cmp.setup({
         -- vsnip = '⋗',
         -- buffer = 'Ω',
         -- path = '🖫',󱉟 󰗚   󱨢 󰘬
-        nvim_lsp = '󱉟 ',
+        nvim_lsp = ' ',
         vsnip = '⋗ ',
         buffer = 'Ω ',
         path = '> ',
@@ -293,3 +298,76 @@ require("todo-comments").setup({
     -- pattern = [[\b(KEYWORDS)\b]], -- match without the extra colon. You'll likely get false positives
   },
 })
+
+
+--[[ TABBY ]]
+-- vim.o.showtabline = 2
+vim.opt.sessionoptions = 'curdir,folds,globals,help,tabpages,terminal,winsize'
+
+-- local theme = {
+--   fill = 'TabLineFill',
+--   -- Also you can do this: fill = { fg='#f2e9de', bg='#907aa9', style='italic' }
+--   head = 'TabLine',
+--   current_tab = 'TabLineSel',
+--   tab = 'TabLine',
+--   win = 'TabLine',
+--   tail = 'TabLine',
+-- }
+-- require('tabby.tabline').set(function(line)
+--   return {
+--     {
+--       { '  ', hl = theme.head },
+--       line.sep('', theme.head, theme.fill),
+--     },
+--     line.tabs().foreach(function(tab)
+--       local hl = tab.is_current() and theme.current_tab or theme.tab
+--       return {
+--         line.sep('', hl, theme.fill),
+--         tab.is_current() and '' or '󰆣',
+--         tab.number(),
+--         tab.name(),
+--         tab.close_btn(''),
+--         line.sep('', hl, theme.fill),
+--         hl = hl,
+--         margin = ' ',
+--       }
+--     end),
+--     line.spacer(),
+--     line.wins_in_tab(line.api.get_current_tab()).foreach(function(win)
+--       return {
+--         line.sep('', theme.win, theme.fill),
+--         win.is_current() and '' or '',
+--         win.buf_name(),
+--         line.sep('', theme.win, theme.fill),
+--         hl = theme.win,
+--         margin = ' ',
+--       }
+--     end),
+--     {
+--       line.sep('', theme.tail, theme.fill),
+--       { '  ', hl = theme.tail },
+--     },
+--     hl = theme.fill,
+--   }
+-- end)
+
+-- require("tabby.tabline").use_preset('active_wins_at_tail', {
+--   theme = {
+--     fill = 'TabLineFill',       -- tabline background
+--     head = 'TabLine',           -- head element highlight
+--     current_tab = 'TabLineSel', -- current tab label highlight
+--     tab = 'TabLine',            -- other tab label highlight
+--     win = 'TabLine',            -- window highlight
+--     tail = 'TabLine',           -- tail element highlight
+--   },
+--   nerdfont = true,              -- whether use nerdfont
+--   lualine_theme = nil,          -- lualine theme name
+--   tab_name = {
+--     name_fallback = function(tabid)
+--       return tabid
+--     end,
+--   },
+--   buf_name = {
+--     mode = "'unique'|'relative'|'tail'|'shorten'",
+--   },
+-- })
