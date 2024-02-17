@@ -138,6 +138,14 @@ vim.cmd("set smartcase")
 -- blank out mouse to prevent accidentally selecting the wrong window/buffer/tab/etc
 vim.cmd("set mouse=")
 
+-- prevents the status line moving around - and only shows in active window - global setting in lualine causes it to be for everyone 
+vim.cmd("set laststatus=3")
+
+-- prevents doubling up on mode notification
+vim.cmd("set noshowmode")
+
+
+
 --[[ COMPLETION ]]
 local cmp = require("cmp")
 cmp.setup({
@@ -188,10 +196,10 @@ cmp.setup({
         -- nvim_lsp = 'λ',
         -- vsnip = '⋗',
         -- buffer = 'Ω',
-        -- path = '🖫',󱉟 󰗚   󱨢 󰘬
-        nvim_lsp = ' ',
+        -- path = '🖫',󱉟 󰗚   󱨢 󰘬       Ω
+        nvim_lsp = ' ',
         vsnip = '⋗ ',
-        buffer = 'Ω ',
+        buffer = ' ',
         path = '> ',
 
       }
@@ -305,7 +313,7 @@ require("todo-comments").setup({
 
 --[[ TABBY ]]
 -- vim.o.showtabline = 2
-vim.opt.sessionoptions = 'curdir,folds,globals,help,tabpages,terminal,winsize'
+-- vim.opt.sessionoptions = 'curdir,folds,globals,help,tabpages,terminal,winsize'
 
 -- local theme = {
 --   fill = 'TabLineFill',

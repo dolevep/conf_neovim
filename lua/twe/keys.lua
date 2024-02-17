@@ -14,14 +14,14 @@ vim.keymap.set("n", "-", "<cmd>Oil<CR>", { desc = "Open parent directory" })
 -- vim.keymap.set("n", "<Backspace>", "<cmd>execute \":normal 1\\<C-O>\"<CR>")
 -- vim.keymap.set("n", "\\", "<cmd>execute \":normal 1\\<C-I>\"<CR>")
 
-local bufjump_opts = { silent=true, noremap=true }
-vim.keymap.set("n", "<Backspace>", "<cmd>lua require('bufjump').backward()<cr>", bufjump_opts)
-vim.keymap.set("n", "\\", "<cmd>lua require('bufjump').forward()<cr>", bufjump_opts)
+-- local bufjump_opts = { silent = true, noremap = true }
+-- vim.keymap.set("n", "<Backspace>", "<cmd>lua require('bufjump').backward()<cr>", bufjump_opts)
+-- vim.keymap.set("n", "\\", "<cmd>lua require('bufjump').forward()<cr>", bufjump_opts)
 
 -- vim.keymap.set("n", "<Backspace>", "g;")
 -- vim.keymap.set("n", "\\", "g,")
 
--- moves visual blocks around 
+-- moves visual blocks around
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
@@ -45,7 +45,7 @@ vim.keymap.set('n', '<leader>pb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>F', function() vim.lsp.buf.format() end)
 
 -- Buffer management
-vim.keymap.set('n', '<Tab>', ":bNext<CR>")
+vim.keymap.set('n', '<Tab>', "<cmd>bNext<CR>")
 
 
 -- LSP
@@ -93,3 +93,4 @@ vim.api.nvim_create_autocmd('LspAttach', {
 -- vim.keymap.set("n", "<leader>sn", function() possession.new() end)
 -- vim.keymap.set("n", "<leader>su", function() possession.update() end)
 -- vim.keymap.set("n", "<leader>sd", function() possession.delete() end)
+

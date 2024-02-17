@@ -1,57 +1,271 @@
 return {
 	"nvim-lualine/lualine.nvim",
-	dependencies = { "nvim-tree/nvim-web-devicons" },
+	dependencies = {
+		"nvim-tree/nvim-web-devicons",
+		"f-person/git-blame.nvim",
+	},
 	config = function()
-		local custom = require("lualine.themes.horizon");
-        local _tmp = custom.normal
-		custom.normal = custom.insert
-        custom.insert = custom.replace
-        custom.replace = _tmp
+		-- Import and configure git-blame
+		-- local git_blame = require('gitblame')
+		-- vim.g.gitblame_display_virtual_text = 0 -- disables showing the blame text inline ... might actually want....
+		-- decided against git-blame for now
 
+		-- customise some colours
+		local theme_twe = require('lualine.themes.ayu_dark')
+		local colors = {
+			black        = '#282828',
+			white        = '#ebdbb2',
+			red          = '#fb4934',
+			green        = '#b8bb26',
+			blue         = '#83a598',
+			yellow       = '#fe8019',
+			gray         = '#a89984',
+			darkgray     = '#3c3836',
+			lightgray    = '#504945',
+			inactivegray = '#7c6f64',
+		}
+
+		-- theme_twe.normal.a.bg = ""
+
+		theme_twe.normal.b.bg = ""
+		theme_twe.normal.c.bg = ""
+
+		theme_twe.inactive.a.bg = ""
+		theme_twe.inactive.b.bg = ""
+		theme_twe.inactive.c.bg = ""
+
+		--   local x = ''
+		-- sd\\\3
+
+		--#7eb0ff
+
+		--		
 		require("lualine").setup({
-			--[[ CUSTOMIZE horizon ]] --
-			---------------------------
+			-- BUG IMPORTANT: For whatever reason colours/separators/etc being set here are having a
+			-- unpredictable effect on incline's icon's colour - often it's 'gray' when it should be
+			-- blue/orange/etc
+
 			options = {
 				icons_enabled = true,
-				theme = "ayu",
-				component_separators = { left = '', right = '' },
-				section_separators = { left = '', right = '' },
+				theme = theme_twe,
+				-- component_separators = { left = '', right = '' },
+				-- section_separators = { left = '', right = '' },
+				component_separators = '|',
+				--
+				section_separators = { left = '', right = '' },
 				disabled_filetypes = {
 					statusline = {},
 					winbar = {},
 				},
-				ignore_focus = {},
-				always_divide_middle = true,
+				-- ignore_focus = {},
+				always_divide_middle = false,
 				globalstatus = false,
 				refresh = {
-					statusline = 1000,
+					statusline = 50,
 					tabline = 1000,
-					winbar = 1000,
-				}
+					winbar = 1000
+				},
 			},
 			sections = {
-				lualine_a = { 'mode' },
-				lualine_b = { 'branch', 'diff', 'diagnostics' },
-				lualine_c = { 'filename' },
-				lualine_x = { 'encoding', 'fileformat', 'filetype' },
-				lualine_y = { 'progress' },
-				lualine_z = { 'location' }
+				lualine_a = {
+					{
+						padding = 1,
+						-- 
+						-- 󰍕
+						-- 󰸞
+						-- 
+						-- 
+						"diagnostics",
+						fmt = function(str)
+							local mode = vim.api.nvim_get_mode()["mode"]
+							if str == "" and mode ~= 't' then
+								return "󰍕"
+							else
+								return str
+							end
+						end,
+						sources = { "nvim_lsp" },
+						sections = {
+							'error',
+							'warn',
+							'hint',
+							'info',
+						},
+						color = { bg = colors.green, fg = colors.black },
+						diagnostics_color =
+						{
+							error = { bg = colors.red, fg = "#000000" },
+							warn = { bg = colors.yellow, fg = "#000000" },
+							hint = { bg = colors.white, fg = "#000000" },
+							info = { bg = colors.lightgray, fg = "#000000" },
+						},
+						separator = { left = '', right = '' },
+						draw_empty = false,
+					}
+				},
+				lualine_b = {
+					{
+						"mode",
+						padding = 0,
+						color = { fg = colors.lightgray, bg = "" },
+						fmt = function()
+							local mode = vim.api.nvim_get_mode()["mode"]
+							if mode ~= 'n' then
+								return ""
+							end
+						end,
+						draw_empty = true,
+					}
+				},
+				lualine_c = {
+					{
+						'mode',
+						separator = { left = '', right = '' },
+						padding = { left = 1 },
+						color = function()
+							local _bg = ""
+							local mode = vim.api.nvim_get_mode()["mode"]
+							if mode == 'v' or mode == "V" then
+								_bg = theme_twe.visual.a.bg
+							elseif mode == 'R' or mode == 'r' or mode == 'no' then
+								_bg = theme_twe.replace.a.bg
+							elseif mode == 'i' then
+								_bg = theme_twe.insert.a.bg
+							elseif mode == 'c' then
+								_bg = theme_twe.insert.a.bg
+							else
+								return { fg = "#000000", bg = "#ffffff" }
+							end
+							return { fg = "#000000", bg = _bg }
+						end,
+						fmt = function()
+							local mode = vim.api.nvim_get_mode()["mode"]
+							if mode == 'n' then
+								return ""
+							elseif mode == 'v' or mode == 'V' then
+								return "  "
+							elseif mode == 'r' or mode == 'R' or mode == 'no' then
+								return "󰬢 "
+							elseif mode == 'i' then
+								return "  "
+							elseif mode == 'c' then
+								return "󰜎 "
+							elseif mode == 't' then
+								return "󰞷 "
+							else
+								return mode
+							end
+						end
+
+					},
+				},
+				lualine_x = {
+					{
+						"diff",
+					}
+				},
+				lualine_y = {
+					{
+						"branch",
+						color = { bg = colors.gray, fg = "#000000" },
+						separator = { left = "", right = "" }
+					}
+				},
+				lualine_z = {
+					{
+						"location",
+						padding = {
+							left = 0,
+							right = 1,
+						},
+						color = { bg = "", fg = colors.gray },
+						separator = { left = '', right = '' },
+						fmt = function(str)
+							local mode = vim.api.nvim_get_mode()["mode"]
+							if mode == "t" then
+								return ""
+							else
+								return str
+							end
+						end
+					}
+				},
 			},
+
 			inactive_sections = {
-				lualine_a = {},
+				lualine_a = {
+					{
+						padding = 1,
+						-- 
+						-- 󰍕
+						-- 󰸞
+						-- 
+						-- 
+						"diagnostics",
+						fmt = function(str)
+							local mode = vim.api.nvim_get_mode()["mode"]
+							if str == "" and mode ~= 't' then
+								return "󰍕"
+							else
+								return str
+							end
+						end,
+						sources = { "nvim_lsp" },
+						sections = {
+							'error',
+							'warn',
+							'hint',
+							'info',
+						},
+						color = { bg = colors.green, fg = colors.black },
+						diagnostics_color =
+						{
+							error = { bg = colors.red, fg = "#000000" },
+							warn = { bg = colors.yellow, fg = "#000000" },
+							hint = { bg = colors.white, fg = "#000000" },
+							info = { bg = colors.lightgray, fg = "#000000" },
+						},
+						separator = { left = '', right = '' },
+						draw_empty = false,
+					}
+				},
 				lualine_b = {},
-				lualine_c = { 'filename' },
-				lualine_x = { 'location' },
+				lualine_c = {},
+				lualine_x = {},
 				lualine_y = {},
-				lualine_z = {}
+				lualine_z = {
+					{
+						"location",
+						padding = {
+							left = 0,
+							right = 1,
+						},
+						color = { bg = "", fg = colors.gray },
+						separator = { left = '', right = '' },
+						fmt = function(str)
+							local mode = vim.api.nvim_get_mode()["mode"]
+							if mode == "t" then
+								return ""
+							else
+								return str
+							end
+						end
+					}
+				},
 			},
+
+			-- tabline is largely not used anyway.
 			tabline = {},
+			inactive_tabline = {},
+
+			-- winbar is currently being used by navic/barbecue
 			winbar = {},
 			inactive_winbar = {},
+
 			extensions = {
-        "oil",
-				"trouble",
-      }
+				"oil"
+			}
 		})
 	end
+
 }

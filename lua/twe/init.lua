@@ -1,4 +1,5 @@
 vim.g.mapleader = " "
+vim.cmd("set termguicolors")
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -20,3 +21,8 @@ require("lazy").setup("twe.lazy", {
 require("twe.keys")
 require("twe.opt")
 require("twe.autocmds")
+
+-- Colorscheme set here 
+vim.cmd("colorscheme ayu")
+vim.cmd("set laststatus=2")
+vim.cmd("setlocal laststatus=2")
