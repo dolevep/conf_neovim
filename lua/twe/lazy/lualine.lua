@@ -1,3 +1,21 @@
+-- LSP clients attached to buffer
+local clients_lsp = function()
+	local bufnr = vim.api.nvim_get_current_buf()
+
+	local clients = vim.lsp.buf_get_clients(bufnr)
+	if next(clients) == nil then
+		return ''
+	end
+
+	local c = {}
+	for _, client in pairs(clients) do
+		table.insert(c, client.name)
+	end
+	return table.concat(c, '|')
+	-- return '󰍕 ' .. table.concat(c, '|')
+	-- return '\u{f085} ' .. table.concat(c, '|')
+end
+
 return {
 	"nvim-lualine/lualine.nvim",
 	dependencies = {
@@ -77,9 +95,13 @@ return {
 						-- 
 						"diagnostics",
 						fmt = function(str)
+							local clients = clients_lsp()
 							local mode = vim.api.nvim_get_mode()["mode"]
-							if str == "" and mode ~= 't' then
-								return "󰍕"
+							if clients == '' and mode ~= 't'  then
+								return "󱃞"
+							elseif str == '' and mode ~= 't' then
+								-- return "󰍕"
+								return "󰍕 " .. clients
 							else
 								return str
 							end
@@ -91,7 +113,16 @@ return {
 							'hint',
 							'info',
 						},
-						color = { bg = colors.green, fg = colors.black },
+						color = function()
+							local clients = clients_lsp()
+							local _col = {}
+							if clients == "" then
+								_col = { bg = colors.darkgray, fg = colors.white }
+							else
+								_col = { bg = theme_twe.insert.a.bg, fg = "#000000" }
+							end
+							return _col
+						end,
 						diagnostics_color =
 						{
 							error = { bg = colors.red, fg = "#000000" },
@@ -101,6 +132,7 @@ return {
 						},
 						separator = { left = '', right = '' },
 						draw_empty = false,
+						update_in_insert = true,
 					}
 				},
 				lualine_b = {
@@ -129,9 +161,7 @@ return {
 								_bg = theme_twe.visual.a.bg
 							elseif mode == 'R' or mode == 'r' or mode == 'no' then
 								_bg = theme_twe.replace.a.bg
-							elseif mode == 'i' then
-								_bg = theme_twe.insert.a.bg
-							elseif mode == 'c' then
+							elseif mode == 'i' or mode == 'c' then
 								_bg = theme_twe.insert.a.bg
 							else
 								return { fg = "#000000", bg = "#ffffff" }
@@ -203,9 +233,13 @@ return {
 						-- 
 						"diagnostics",
 						fmt = function(str)
+							local clients = clients_lsp()
 							local mode = vim.api.nvim_get_mode()["mode"]
-							if str == "" and mode ~= 't' then
-								return "󰍕"
+							if clients == '' then
+								return "󱃞"
+							elseif str == "" and mode ~= 't' then
+								-- return "󰍕"
+								return '󰍕 ' .. clients
 							else
 								return str
 							end
@@ -217,7 +251,16 @@ return {
 							'hint',
 							'info',
 						},
-						color = { bg = colors.green, fg = colors.black },
+						color = function()
+							local clients = clients_lsp()
+							local _col = {}
+							if clients == "" then
+								_col = { bg = colors.darkgray, fg = colors.white }
+							else
+								_col = { bg = theme_twe.insert.a.bg, fg = "#000000" }
+							end
+							return _col
+						end,
 						diagnostics_color =
 						{
 							error = { bg = colors.red, fg = "#000000" },
@@ -227,12 +270,23 @@ return {
 						},
 						separator = { left = '', right = '' },
 						draw_empty = false,
+						update_in_insert = true,
 					}
 				},
 				lualine_b = {},
 				lualine_c = {},
-				lualine_x = {},
-				lualine_y = {},
+				lualine_x = {
+					{
+						"diff",
+					}
+				},
+				lualine_y = {
+					{
+						"branch",
+						color = { bg = colors.gray, fg = "#000000" },
+						separator = { left = "", right = "" }
+					}
+				},
 				lualine_z = {
 					{
 						"location",

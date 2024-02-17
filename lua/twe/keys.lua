@@ -7,6 +7,21 @@
 -- Leader specifically set in init
 -- vim.g.mapleader = " "	
 
+
+local function dump(o)
+   if type(o) == 'table' then
+      local s = '{ '
+      for k,v in pairs(o) do
+         if type(k) ~= 'number' then k = '"'..k..'"' end
+         s = s .. '['..k..'] = ' .. dump(v) .. ','
+      end
+      return s .. '} '
+   else
+      return tostring(o)
+   end
+end
+
+
 -- Return to filebrowser
 -- vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 vim.keymap.set("n", "-", "<cmd>Oil<CR>", { desc = "Open parent directory" })
@@ -94,3 +109,15 @@ vim.api.nvim_create_autocmd('LspAttach', {
 -- vim.keymap.set("n", "<leader>su", function() possession.update() end)
 -- vim.keymap.set("n", "<leader>sd", function() possession.delete() end)
 
+
+vim.keymap.set('n', "<leader>qq",
+  function()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local clients = vim.lsp.buf_get_clients(bufnr)
+    if next(clients) == nil then
+      print("no clients lol")
+    else
+      print("clients lol: " .. dump(clients))
+    end
+
+  end)
