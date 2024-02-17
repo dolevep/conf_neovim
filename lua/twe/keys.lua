@@ -7,7 +7,7 @@
 -- Leader specifically set in init
 -- vim.g.mapleader = " "	
 
-
+-- useful for dumping tables to find out whats going on
 local function dump(o)
    if type(o) == 'table' then
       local s = '{ '

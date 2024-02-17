@@ -53,7 +53,8 @@ return {
 		theme_twe.inactive.c.bg = ""
 
 		--   local x = ''
-		-- sd\\\3
+		-- \\\3
+  --   ssdfs
 
 		--#7eb0ff
 
@@ -130,6 +131,7 @@ return {
 							hint = { bg = colors.white, fg = "#000000" },
 							info = { bg = colors.lightgray, fg = "#000000" },
 						},
+            symbols = { error = '󰈸' },
 						separator = { left = '', right = '' },
 						draw_empty = false,
 						update_in_insert = true,
