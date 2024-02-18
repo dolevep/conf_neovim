@@ -33,8 +33,8 @@ vim.keymap.set("n", "-", "<cmd>Oil<CR>", { desc = "Open parent directory" })
 -- vim.keymap.set("n", "<Backspace>", "<cmd>lua require('bufjump').backward()<cr>", bufjump_opts)
 -- vim.keymap.set("n", "\\", "<cmd>lua require('bufjump').forward()<cr>", bufjump_opts)
 
--- vim.keymap.set("n", "<Backspace>", "g;")
--- vim.keymap.set("n", "\\", "g,")
+vim.keymap.set("n", "<Backspace>", "g;")
+vim.keymap.set("n", "\\", "g,")
 
 -- moves visual blocks around
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
@@ -69,7 +69,7 @@ vim.keymap.set('n', '<Tab>', "<cmd>bNext<CR>")
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
+vim.keymap.set('n', '<leader>q', "<cmd>TroubleToggle loclist<CR>")
 
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer

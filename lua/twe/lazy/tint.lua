@@ -2,7 +2,7 @@ return {
   "levouh/tint.nvim",
   config = function()
     require("tint").setup({
-      tint = -45,
+      tint = -25,
     })
   end
 }
